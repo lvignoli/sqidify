@@ -7,7 +7,6 @@ pub fn build(b: *std.Build) void {
     // Get the sqids module from the sqids package defined in build.zig.zon.
     const sqids_dep = b.dependency("sqids", .{});
     const sqids_module = sqids_dep.module("sqids");
-    //
 
     const exe = b.addExecutable(.{
         .name = "encodang",
@@ -18,7 +17,6 @@ pub fn build(b: *std.Build) void {
 
     // Make the sqids module available to our executable under the import name "sqids".
     exe.addModule("sqids", sqids_module);
-    //
 
     b.installArtifact(exe);
     const run_cmd = b.addRunArtifact(exe);

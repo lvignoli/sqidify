@@ -17,7 +17,7 @@ pub fn main() !void {
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
 
-    // Read a single line out the input, up to 1000 characters.
+    // Read a single line out of the input, up to 1000 characters.
     const max_size = 1000;
     const buffer: []const u8 = try stdin.readUntilDelimiterAlloc(allocator, '\n', max_size);
     defer allocator.free(buffer);
