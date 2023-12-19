@@ -1,0 +1,21 @@
+.{
+    .name = "sqidify",
+    .version = "0.0.0",
+    .dependencies = .{
+        // Using commit 2fb858f for demonstration.
+        // You can generate this line by calling
+        //     zig fetch --save https://github.com/sqids/sqids-zig/archive/2fb858f9627ca1e8a4a4f2bfcaaff8ed95c4d79a.tar.gz
+        // so that zig save the computed hash for you.
+        .sqids = .{
+            .url = "https://github.com/sqids/sqids-zig/archive/2fb858f9627ca1e8a4a4f2bfcaaff8ed95c4d79a.tar.gz",
+            .hash = "12204871aba38942e5f15bb4d2b8f3ace05b2d8c599bb60eb5e115acf8eed996320e",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "LICENSE",
+        "README.md",
+    },
+}
