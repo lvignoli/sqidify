@@ -9,7 +9,7 @@ pub fn build(b: *std.Build) void {
     const sqids_module = sqids_dep.module("sqids");
 
     const exe = b.addExecutable(.{
-        .name = "encodang",
+        .name = "sqidify",
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
