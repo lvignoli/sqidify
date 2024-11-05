@@ -11,23 +11,30 @@ pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
 
-    // Get standard input and output
+    // Get standard input and read a single line up to 4kb (should be enough).
     const stdin = std.io.getStdIn().reader();
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
-
-    // Read a single line out of the input, up to 1000 characters.
-    const max_size = 1000;
-    const buffer: []const u8 = try stdin.readUntilDelimiterAlloc(allocator, '\n', max_size);
+    var buffer: []const u8 = (try stdin.readUntilDelimiterOrEofAlloc(allocator, '\n', 1 << 12)).?;
     defer allocator.free(buffer);
+    buffer = mem.trim(u8, buffer, &.{' '});
+
+    // Bail out early on zero-length input.
+    if (buffer.len == 0) {
+        std.log.err("zero-length input", .{});
+        return;
+    }
 
     // Parse each space-separated string as a u64 number.
     var it = mem.splitScalar(u8, buffer, ' ');
     var arr = std.ArrayList(u64).init(allocator);
     defer arr.deinit();
     while (it.next()) |tok| {
-        const n = try std.fmt.parseInt(u64, tok, 10);
+        const n = std.fmt.parseInt(u64, tok, 10) catch |err| switch (err) {
+            error.InvalidCharacter => {
+                std.log.err("parsing to u64 integer: invalid character in string: {s}", .{tok});
+                return;
+            },
+            else => return err,
+        };
         try arr.append(n);
     }
     const numbers = try arr.toOwnedSlice();
@@ -39,9 +46,7 @@ pub fn main() !void {
     const id = try s.encode(numbers);
     defer allocator.free(id);
 
-    // Output.
+    // Print to stdout.
+    const stdout = std.io.getStdOut().writer();
     try stdout.print("{s}\n", .{id});
-
-    // Flush.
-    try bw.flush();
 }
