@@ -42,6 +42,6 @@ pub fn main() !void {
     // Output.
     try stdout.print("{s}\n", .{id});
 
-    // Flush
+    // Flush.
     try bw.flush();
 }
