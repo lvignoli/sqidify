@@ -10,15 +10,15 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "sqidify",
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
 
     // Make the sqids module available to our executable under the import name "sqids".
-    exe.addModule("sqids", sqids_module);
-
+    exe.root_module.addImport("sqids", sqids_module);
     b.installArtifact(exe);
+
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
 
